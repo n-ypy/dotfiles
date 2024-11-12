@@ -1,7 +1,7 @@
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
 -- nightly build only for now config.color_scheme = 'Kanagawa Dragon (Gogh)'
-local scheme_name = "Rosé Pine (Gogh)"
+local scheme_name = "tokyonight_night"
 
 -- MAXIMIZE THE WINDOW ON STARTUP
 local mux = wezterm.mux
@@ -22,7 +22,6 @@ config.font_size = 12.0
 config.enable_scroll_bar = false
 config.force_reverse_video_cursor = true
 config.window_decorations = "NONE"
--- TAB BAR
 config.visual_bell = {
 	fade_in_function = "EaseIn",
 	fade_in_duration_ms = 150,
@@ -31,33 +30,33 @@ config.visual_bell = {
 }
 config.colors = {
 	visual_bell = "#3a2222",
-	tab_bar = {
-		background = "#333333",
-		active_tab = {
-			bg_color = "#111111",
-			fg_color = "#ffffff",
-			intensity = "Normal",
-			underline = "None",
-			italic = false,
-			strikethrough = false,
-		},
-		inactive_tab = {
-			bg_color = "#333333",
-			fg_color = "#999999",
-		},
-		inactive_tab_hover = {
-			bg_color = "#333333",
-			fg_color = "#FFFFFF",
-		},
-		new_tab = {
-			bg_color = "#333333",
-			fg_color = "#999999",
-		},
-		new_tab_hover = {
-			bg_color = "#333333",
-			fg_color = "#999999",
-		},
-	},
+	-- tab_bar = {
+	-- 	background = "#333333",
+	-- 	active_tab = {
+	-- 		bg_color = "#111111",
+	-- 		fg_color = "#ffffff",
+	-- 		intensity = "Normal",
+	-- 		underline = "None",
+	-- 		italic = false,
+	-- 		strikethrough = false,
+	-- 	},
+	-- 	inactive_tab = {
+	-- 		bg_color = "#333333",
+	-- 		fg_color = "#999999",
+	-- 	},
+	-- 	inactive_tab_hover = {
+	-- 		bg_color = "#333333",
+	-- 		fg_color = "#FFFFFF",
+	-- 	},
+	-- 	new_tab = {
+	-- 		bg_color = "#333333",
+	-- 		fg_color = "#999999",
+	-- 	},
+	-- 	new_tab_hover = {
+	-- 		bg_color = "#333333",
+	-- 		fg_color = "#999999",
+	-- 	},
+	-- },
 }
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true
@@ -111,9 +110,25 @@ config.keys = {
 		action = wezterm.action.CloseCurrentTab({ confirm = false }),
 	},
 	{
-		key = "t",
+		key = "b",
 		mods = "CTRL|SHIFT",
 		action = wezterm.action.CloseCurrentPane({ confirm = false }),
+	},
+	{
+		key = "!",
+		mods = "CTRL|SHIFT",
+		action = wezterm.action_callback(function(win, pane)
+			local tab, window = pane:move_to_new_tab()
+			tab:activate()
+		end),
+	},
+	{
+		key = "|",
+		mods = "CTRL|SHIFT|ALT",
+		action = wezterm.action.SplitPane({
+			direction = "Right",
+			size = { Percent = 50 },
+		}),
 	},
 }
 
@@ -122,8 +137,10 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 	local tab_index = tab.tab_index + 1
 	title = " " .. tab_index .. ": " .. (title or "")
 	title = wezterm.truncate_right(title, max_width - 2) .. " "
-	local active_bg = config.colors.tab_bar.active_tab.bg_color
-	local inactive_bg = config.colors.tab_bar.inactive_tab.bg_color
+	print(config.resolved_palette.tab_bar)
+	local active_bg = config.resolved_palette.tab_bar.active_tab.bg_color
+	local inactive_bg = config.resolved_palette.tab_bar.inactive_tab.bg_color
+	local bg = config.resolved_palette.tab_bar.background
 
 	local arrow_fg
 	local arrow_bg
@@ -132,6 +149,10 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 		arrow_bg = active_bg
 	else
 		arrow_bg = inactive_bg
+	end
+
+	if not tabs[tab_index + 1] then
+		arrow_bg = bg
 	end
 
 	if tab.is_active then
