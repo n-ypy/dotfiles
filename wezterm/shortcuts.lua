@@ -48,18 +48,6 @@ local shortcuts = {
 		action = act.CloseCurrentPane({ confirm = false }),
 	},
 	{
-		-- Activates copy mode (a.k.a Vi mode)
-		key = "x",
-		mods = "CTRL|SHIFT",
-		action = wezterm.action.ActivateCopyMode,
-	},
-	{
-		-- Activates the Command Palette, a modal overlay that enables discovery and activation of various commands.
-		key = "p",
-		mods = "CTRL|SHIFT",
-		action = act.ActivateCommandPalette,
-	},
-	{
 		-- ActivatePaneDirection activate an adjacent pane in the Left direction.
 		key = "h",
 		mods = "CTRL|SHIFT",
@@ -83,6 +71,87 @@ local shortcuts = {
 		mods = "CTRL|SHIFT",
 		action = act.ActivatePaneDirection("Down"),
 	},
+	{
+		--AdjustPaneSize manipulates the size of the active pane, allowing the size to be adjusted by 5 in Left direction.
+		key = "h",
+		mods = "CTRL|SHIFT|ALT",
+		action = act.AdjustPaneSize({ "Left", 5 }),
+	},
+	{
+		--AdjustPaneSize manipulates the size of the active pane, allowing the size to be adjusted by 5 in Right direction.
+		key = "l",
+		mods = "CTRL|SHIFT|ALT",
+		action = act.AdjustPaneSize({ "Right", 5 }),
+	},
+	{
+		--AdjustPaneSize manipulates the size of the active pane, allowing the size to be adjusted by 5 in Down direction.
+		key = "j",
+		mods = "CTRL|SHIFT|ALT",
+		action = act.AdjustPaneSize({ "Down", 5 }),
+	},
+	{
+		--AdjustPaneSize manipulates the size of the active pane, allowing the size to be adjusted by 5 in Up direction.
+		key = "k",
+		mods = "CTRL|SHIFT|ALT",
+		action = act.AdjustPaneSize({ "Up", 5 }),
+	},
+	{
+		-- Decreases the font size of the current window by 10%
+		key = "_",
+		mods = "CTRL|SHIFT",
+		action = act.DecreaseFontSize,
+	},
+	{
+		-- Increases the font size of the current window by 10%
+		key = "+",
+		mods = "CTRL|SHIFT",
+		action = act.IncreaseFontSize,
+	},
+	{
+		-- Reset the font size for the current window to the value in configuration.
+		key = ")",
+		mods = "CTRL|SHIFT",
+		action = act.ResetFontSize,
+	},
+	{
+		-- Activates the Command Palette, a modal overlay that enables discovery and activation of various commands.
+		key = "p",
+		mods = "CTRL|SHIFT",
+		action = act.ActivateCommandPalette,
+	},
+	{
+		-- Activates Quick Select Mode.
+		key = " ",
+		mods = "CTRL|SHIFT",
+		action = act.QuickSelect,
+	},
+	{
+		-- Activates copy mode (a.k.a Vi mode)
+		key = "x",
+		mods = "CTRL|SHIFT",
+		action = act.ActivateCopyMode,
+	},
+	{
+		-- Copy the selection to the clipboard buffer.
+		key = "c",
+		mods = "CTRL|SHIFT",
+		action = act.CopyTo("Clipboard"),
+	},
+	{
+		-- Paste the clipboard to the current pane.
+		key = "v",
+		mods = "CTRL|SHIFT",
+		action = act.PasteFrom("Clipboard"),
+	},
 }
+
+for i = 1, 8 do
+	-- CTRL+ALT + number to activate that tab
+	table.insert(shortcuts, {
+		key = tostring(i),
+		mods = "CTRL|ALT",
+		action = act.ActivateTab(i - 1),
+	})
+end
 
 return shortcuts

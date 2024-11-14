@@ -14,7 +14,6 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 	local tab_index = tab.tab_index + 1
 	title = " " .. tab_index .. ": " .. (title or "")
 	title = wezterm.truncate_right(title, max_width - 2) .. " "
-	print(config.resolved_palette.tab_bar)
 	local active_bg = config.resolved_palette.tab_bar.active_tab.bg_color
 	local inactive_bg = config.resolved_palette.tab_bar.inactive_tab.bg_color
 	local bg = config.resolved_palette.tab_bar.background
