@@ -12,7 +12,7 @@ config.audible_bell = "SystemBeep"
 config.color_scheme = scheme_name
 -- config.font = wezterm.font("Meslo LG S for Powerline", { weight = "Regular" })
 config.font = wezterm.font("JetBrainsMonoNL Nerd Font Mono", { weight = "Regular" })
-config.font_size = 12.0
+config.font_size = 11.5
 config.enable_scroll_bar = false
 config.force_reverse_video_cursor = true
 config.window_decorations = "NONE"

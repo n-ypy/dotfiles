@@ -143,6 +143,12 @@ local shortcuts = {
 		mods = "CTRL|SHIFT",
 		action = act.PasteFrom("Clipboard"),
 	},
+	{
+		-- Trigger the search overlay for the current tab.
+		key = "f",
+		mods = "SHIFT|CTRL",
+		action = act.Search("CurrentSelectionOrEmptyString"),
+	},
 }
 
 for i = 1, 8 do
