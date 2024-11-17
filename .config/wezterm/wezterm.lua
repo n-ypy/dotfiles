@@ -4,8 +4,6 @@ require("on")
 -- nightly build only for now config.color_scheme = 'Kanagawa Dragon (Gogh)'
 local scheme_name = "tokyonight_night"
 
--- CONFIG
--- This will hold the configuration.
 local config = wezterm.config_builder()
 config.keys = shortcuts
 config.audible_bell = "SystemBeep"
@@ -65,7 +63,7 @@ config.ui_key_cap_rendering = "WindowsLong"
 config.unicode_version = 14
 config.use_ime = false
 config.warn_about_missing_glyphs = true
-config.webgpu_power_preference = "LowPower"
+config.webgpu_power_preference = "HighPerformance"
 config.window_close_confirmation = "AlwaysPrompt"
 
 return config
