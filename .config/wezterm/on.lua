@@ -91,7 +91,8 @@ wezterm.on("update-right-status", function(window, pane)
 	window:set_right_status(wezterm.format(elements))
 end)
 
-local SOLID_RIGHT_ARROW = wezterm.nerdfonts.pl_left_hard_divider
+local LEFT_SOFT_DIVIDER = wezterm.nerdfonts.pl_left_soft_divider
+local LEFT_HARD_DIVIDER = wezterm.nerdfonts.pl_left_hard_divider
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
 	local title = tab.active_pane.title
 	local tab_index = tab.tab_index + 1
@@ -120,10 +121,18 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 		arrow_fg = inactive_bg
 	end
 
+	local divider
+	if not tab.is_active and tabs[tab_index + 1] and not tabs[tab_index + 1].is_active then
+		divider = LEFT_SOFT_DIVIDER
+		arrow_fg = active_bg
+	else
+		divider = LEFT_HARD_DIVIDER
+	end
+
 	return {
 		{ Text = title },
 		{ Background = { Color = arrow_bg } },
 		{ Foreground = { Color = arrow_fg } },
-		{ Text = SOLID_RIGHT_ARROW },
+		{ Text = divider },
 	}
 end)
