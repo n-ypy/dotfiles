@@ -96,8 +96,8 @@ local LEFT_HARD_DIVIDER = wezterm.nerdfonts.pl_left_hard_divider
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
 	local title = tab.active_pane.title
 	local tab_index = tab.tab_index + 1
-	title = " " .. tab_index .. ": " .. (title or "")
-	title = wezterm.truncate_right(title, max_width - 2) .. " "
+	title = title or ""
+	title = wezterm.truncate_right(title, max_width - 5) .. " "
 	local active_bg = config.resolved_palette.tab_bar.active_tab.bg_color
 	local inactive_bg = config.resolved_palette.tab_bar.inactive_tab.bg_color
 	local bg = config.resolved_palette.tab_bar.background
@@ -130,6 +130,9 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 	end
 
 	return {
+		{ Attribute = { Intensity = "Bold" } },
+		{ Text = " " .. tab_index .. " " },
+		{ Attribute = { Intensity = "Normal" } },
 		{ Text = title },
 		{ Background = { Color = arrow_bg } },
 		{ Foreground = { Color = arrow_fg } },
