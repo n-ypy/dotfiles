@@ -1,6 +1,4 @@
 return {
-	-- TODO: -Close the neo-tree window after pressing <CR> to open a file.
-	-- 	 -Add shortcut to open neo-tree in fullscreen.
 	{
 		"nvim-neo-tree/neo-tree.nvim",
 		version = "*",
@@ -23,29 +21,46 @@ return {
 				function()
 					require("neo-tree.command").execute({ source = "git_status", toggle = true })
 				end,
-				desc = "Git Explorer",
+				desc = "[E]xplorer [G]it",
 			},
 			{
 				"<leader>eb",
 				function()
 					require("neo-tree.command").execute({ source = "buffers", toggle = true })
 				end,
-				desc = "Buffer Explorer",
+				desc = "[E]xplorer [B]uffer",
+			},
+			{
+				"<leader>ef",
+				function()
+					require("neo-tree.command").execute({ position = "current", toggle = true })
+				end,
+				desc = "[E]xplorer [F]ullscreen",
 			},
 		},
 		opts = {
 			sources = { "filesystem", "buffers", "git_status" },
 			open_files_do_not_replace_types = { "terminal", "Trouble", "trouble", "qf", "Outline" },
 			filesystem = {
-				bind_to_cwd = false,
-				follow_current_file = { enabled = true },
 				use_libuv_file_watcher = true,
 			},
 			window = {
 				mappings = {
-					["l"] = "open",
 					["h"] = "close_node",
+					["l"] = {
+						function(state)
+							local node = state.tree:get_node()
+							if node and node.type == "file" or "directory" then
+								require("neo-tree.sources.filesystem.commands").open(state)
+								if node.type == "file" then
+									vim.cmd("Neotree close")
+								end
+							end
+						end,
+						desc = "Open File and Close NeoTree",
+					},
 					["<space>"] = "none",
+					["<CR>"] = "open",
 					["Y"] = {
 						function(state)
 							local node = state.tree:get_node()
@@ -65,7 +80,7 @@ return {
 			},
 			default_component_configs = {
 				indent = {
-					with_expanders = true, -- if nil and file nesting is enabled, will enable expanders
+					with_expanders = true,
 					expander_collapsed = "",
 					expander_expanded = "",
 					expander_highlight = "NeoTreeExpander",
