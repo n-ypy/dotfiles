@@ -1,4 +1,6 @@
 return {
+	-- TODO: -Close the neo-tree window after pressing <CR> to open a file.
+	-- 	 -Add shortcut to open neo-tree in fullscreen.
 	{
 		"nvim-neo-tree/neo-tree.nvim",
 		version = "*",
