@@ -5,6 +5,7 @@ set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 set("n", "<leader>cd", ":cd %:p:h<CR>", { desc = "[C]hange to the current file's [D]irectory" })
 
 set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+set("n", "<leader>dl", vim.diagnostic.open_float, { desc = "Shows all [D]iagnostics for the current [L]ine" })
 
 set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
