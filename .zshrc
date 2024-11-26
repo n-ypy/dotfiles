@@ -128,6 +128,7 @@ case ":$PATH:" in
   *) export PATH="$NVIM:$PATH" ;;
 esac
 
+export LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/11
 export CPLUS_INCLUDE_PATH=/usr/include/c++/11:/usr/include/x86_64-linux-gnu/c++/11
 export XDG_STATE_HOME="$HOME/.local/state"
 export ANDROID_HOME=$HOME/Android/Sdk
