@@ -152,8 +152,8 @@ fi
 
 regexp() {
   printf "\n\e[1;34mRegular Expression Basics\e[0m\n"
-  printf "%-30s %-50s\n" "Character" "Explanation"
-  printf "%-30s %-50s\n" "---------" "-----------"
+  printf "%-30s %-50s\n" "\e[1mCharacter\e[22m" "\e[1mExplanation\e[22m"
+  printf "%-30s %-50s\n" "\e[1m---------\e[22m" "\e[1m-----------\e[22m"
   printf "%-30s %-50s\n" "." "Anything. Any character except newline"
   printf "%-30s %-50s\n" "a" "The character a"
   printf "%-30s %-50s\n" "ab" "The string ab"

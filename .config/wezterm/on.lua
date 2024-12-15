@@ -1,52 +1,33 @@
 local wezterm = require("wezterm")
-local mux = wezterm.mux
 
 wezterm.on("gui-startup", function(cmd)
-	-- MAXIMIZE THE WINDOW ON STARTUP
-	local tab, pane, window = mux.spawn_window(cmd or {})
+	local tab, pane, window = wezterm.mux.spawn_window(cmd or {})
 	window:gui_window():maximize()
 end)
 
-local function get_cpu_cores()
-	local handle = io.popen("nproc")
-	if handle then
-		local result = handle:read("*a")
-		handle:close()
-		return tonumber(result) or 1
-	end
-	return 1
-end
-
-local CPU_CORES = get_cpu_cores()
-
 local function get_cpu_usage()
-	local handle = io.popen("ps -A -o %cpu | awk '{s+=$1} END {print s}'")
-	if handle then
-		local result = handle:read("*a")
-		handle:close()
-		local cpu = tonumber(result)
-		if cpu then
-			cpu = cpu / CPU_CORES
-			return string.format("%.1f%%", math.min(cpu, 100))
-		end
+	local success, stdout, stderr = wezterm.run_child_process({ "mpstat", "1", "1" })
+	if success then
+		local cpu_usage = 100 - string.gsub(string.sub(stdout, -6), ",", ".")
+		return string.format("%.1f%%", cpu_usage)
 	end
 	return "N/A"
 end
 
 local function get_ram_usage()
-	local cmd = [[free -m | awk 'NR==2{printf "%.1f%%", $3*100/$2}' ]]
-	local handle = io.popen(cmd)
-	if handle then
-		local result = handle:read("*a")
-		handle:close()
-		if result and result ~= "" then
-			return string.gsub(result, ",", ".")
-		end
+	local success, stdout, stderr = wezterm.run_child_process({ "free", "-m" })
+	if success then
+		local total_mem, used_mem = stdout:match("^%D+(%d+)%D+(%d+).*$")
+		local ram_usage = used_mem * 100 / total_mem
+		return string.format("%.1f%%", ram_usage)
 	end
 	return "N/A"
 end
 
 local function draw_usage_bar(usage_percent)
+	if usage_percent == "N/A" then
+		return ""
+	end
 	local bar_size = 8
 	local used = "━"
 	local unused = "┄"
@@ -61,7 +42,13 @@ local RAM_ICON = wezterm.nerdfonts.fae_chip
 local RIGHT_SOFT_DIVIDER = wezterm.nerdfonts.pl_right_soft_divider
 local RIGHT_HARD_DIVIDER = wezterm.nerdfonts.pl_right_hard_divider
 
-wezterm.on("update-right-status", function(window, pane)
+local last_update = 0
+wezterm.on("update-status", function(window, pane)
+	local curr_time = os.time()
+	if (curr_time - last_update) < 4 then
+		return
+	end
+	last_update = curr_time
 	local cpu_usage = get_cpu_usage()
 	local ram_usage = get_ram_usage()
 	local cpu_bar = draw_usage_bar(cpu_usage)

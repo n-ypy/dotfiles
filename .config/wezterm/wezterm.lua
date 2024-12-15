@@ -1,7 +1,8 @@
 local wezterm = require("wezterm")
 local shortcuts = require("shortcuts")
 require("on")
--- nightly build only for now config.color_scheme = 'Kanagawa Dragon (Gogh)'
+-- nightly build only for now
+-- local scheme_name = "Kanagawa Dragon (Gogh)"
 local scheme_name = "tokyonight_night"
 
 local config = wezterm.config_builder()
@@ -42,6 +43,7 @@ config.exit_behavior_messaging = "Brief"
 config.front_end = "WebGpu"
 config.prefer_to_spawn_tabs = true
 config.scrollback_lines = 5000
+config.status_update_interval = 2000
 config.skip_close_confirmation_for_processes_named = {
 	"deno",
 	"node",
