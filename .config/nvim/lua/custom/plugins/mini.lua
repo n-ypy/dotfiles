@@ -16,6 +16,17 @@ return {
 			-- - sd'   - [S]urround [D]elete [']quotes
 			-- - sr)'  - [S]urround [R]eplace [)] [']
 			require("mini.surround").setup()
+			require("mini.files").setup({
+				mappings = {
+					close = "\\",
+					go_in = "L",
+					go_in_plus = "l",
+				},
+
+				options = {
+					permanent_delete = false,
+				},
+			})
 		end,
 	},
 }
