@@ -5,7 +5,6 @@
 export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
-# load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="agnoster"
@@ -137,19 +136,26 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
-#enable core dumps
+
+# Enable core dumps
 ulimit -c unlimited
 
+# This will check core_pattern value and send a warning
 EXPECTED_PATTERN="/tmp/core.%e.%p"
-CURRENT_PATTERN=$(cat /proc/sys/kernel/core_pattern)
-FIX_COMMAND="echo \"/tmp/core.%e.%p\" | sudo tee /proc/sys/kernel/core_pattern"
+CORE_PATTERN_PATH="/proc/sys/kernel/core_pattern"
+CURRENT_PATTERN=$(cat $CORE_PATTERN_PATH)
 ORANGE='\033[38;5;214m'
 RESET='\033[0m'
-
 if [[ "$CURRENT_PATTERN" != "$EXPECTED_PATTERN" ]]; then
-    echo "${ORANGE}Warning: Core pattern is not set to '$EXPECTED_PATTERN'. Current value: '$CURRENT_PATTERN'${RESET}\nRun the following commad to fix the issue: '$FIX_COMMAND'"
+  echo "${ORANGE}Warning: Core pattern current value: '$CURRENT_PATTERN'${RESET} (run fixcorepattern)"
 fi
 
+# Command to fix core_pattern (sudo needed)
+fixcorepattern(){
+  echo $EXPECTED_PATTERN | sudo tee $CORE_PATTERN_PATH && echo "Core pattern current value: '$(cat /proc/sys/kernel/core_pattern)'"
+}
+
+# Regexp cheat sheet
 regexp() {
   printf "\n\e[1;34mRegular Expression Basics\e[0m\n"
   printf "%-30s %-50s\n" "Character" "Explanation"
